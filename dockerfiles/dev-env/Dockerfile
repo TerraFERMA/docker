@@ -1,4 +1,5 @@
-FROM quay.io/cianwilson/terrafermatestbase
+#FROM quay.io/cianwilson/terrafermatestbase
+FROM terrafermabase
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -18,13 +19,6 @@ RUN apt-get update && \
                        flex \
                        libblas-dev \
                        liblapack-dev \
-                       python \
-                       python-numpy \
-                       python-scipy \
-                       python-matplotlib \
-                       python-ply \
-                       python-pytest \
-                       python-setuptools \
                        swig3.0 \
                        libeigen3-dev \
                        libboost-dev \
@@ -33,11 +27,29 @@ RUN apt-get update && \
                        libboost-iostreams-dev \
                        libboost-timer-dev \
                        libvtk5-dev \
-                       python-vtk \
                        libvtk-java \
                        libvtk5-qt4-dev \
                        libhdf5-openmpi-dev \
-                       gmsh && \
+                       gmsh \
+                       environment-modules && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY bash.enable-modules /etc/bash.enable-modules
+RUN cat /etc/bash.enable-modules >> /etc/bash.bashrc
+
+RUN apt-get update && \
+    apt-get -y --with-new-pkgs \
+        -o Dpkg::Options::="--force-confold" -o Dpkg::Options::="--force-confdef" upgrade && \
+    apt-get -y install \
+                       python \
+                       python-numpy \
+                       python-scipy \
+                       python-matplotlib \
+                       python-ply \
+                       python-pytest \
+                       python-setuptools \
+                       python-vtk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -63,35 +75,41 @@ RUN git clone -q https://bitbucket.org/tferma/petsc.git && \
     make install && \
     rm -rf /tmp/*
 
+COPY petsc.configmodule /usr/local/share/environment-modules/petsc
+
 ENV FENICS_PREFIX /usr/local/fenics
 RUN mkdir -p $FENICS_PREFIX/lib/python2.7/site-packages
-ENV PYTHONPATH $PYTHONPATH:$FENICS_PREFIX/lib/python2.7/site-packages
 
-RUN git clone -q https://bitbucket.org/tferma/ufl.git && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
+    git clone -q https://bitbucket.org/tferma/ufl.git && \
     cd ufl && \
     python setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
-RUN git clone -q https://bitbucket.org/tferma/fiat.git && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
+    git clone -q https://bitbucket.org/tferma/fiat.git && \
     cd fiat && \
     python setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
-RUN git clone -q https://bitbucket.org/tferma/dijitso.git && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
+    git clone -q https://bitbucket.org/tferma/dijitso.git && \
     cd dijitso && \
     python setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
-RUN git clone -q https://bitbucket.org/tferma/instant.git && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
+    git clone -q https://bitbucket.org/tferma/instant.git && \
     cd instant && \
     python setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
-RUN git clone -q https://bitbucket.org/tferma/ffc.git && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
+    git clone -q https://bitbucket.org/tferma/ffc.git && \
     cd ffc && \
     python setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
 
-ENV PETSC_DIR $PETSC_PREFIX
-ENV PATH $FENICS_PREFIX/bin:$PATH
-
-RUN git clone -q https://bitbucket.org/tferma/dolfin.git && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
+    export PETSC_DIR=$PETSC_PREFIX && \
+    export PATH=$FENICS_PREFIX/bin:$PATH && \
+    git clone -q https://bitbucket.org/tferma/dolfin.git && \
     cd dolfin && \
     mkdir build && \
     cd build && \
@@ -110,11 +128,7 @@ RUN git clone -q https://bitbucket.org/tferma/dolfin.git && \
     make install && \
     rm -rf /tmp/*
 
-ENV LD_LIBRARY_PATH $FENICS_PREFIX/lib:$LD_LIBRARY_PATH
-ENV PKG_CONFIG_PATH $FENICS_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
-
-RUN bash -c "source $FENICS_PREFIX/share/dolfin/dolfin.conf"
-
+COPY fenics.configmodule /usr/local/share/environment-modules/fenics
 
 RUN apt-add-repository ppa:fluidity-core/ppa && \
     apt-get update -qq && \
@@ -134,7 +148,8 @@ ENV NO_AT_BRIDGE 1
 WORKDIR $TF_HOME
 
 USER tfuser
-RUN echo 'source ~/.profile' >> $TF_HOME/.bash_profile
+COPY bash.load-modules $TF_HOME/.bash.load-modules
+RUN cat $TF_HOME/.bash.load-modules >> $TF_HOME/.bashrc
 COPY WELCOME $TF_HOME/WELCOME
 
 USER root

@@ -1,0 +1,13 @@
+#%Module1.0
+proc ModulesHelp { } {
+        puts stderr "\tSets environment for PETSc tferma-master (TerraFERMA installation)"
+}
+module-whatis "PETSc tferma-master (TerraFERMA)"
+
+set petsc_prefix /usr/local/petsc
+
+prepend-path    PATH            $petsc_prefix/bin
+prepend-path    LD_LIBRARY_PATH $petsc_prefix/lib
+prepend-path    PYTHONPATH      $petsc_prefix/lib/python2.7/site-packages
+setenv          PETSC_DIR       $petsc_prefix
+

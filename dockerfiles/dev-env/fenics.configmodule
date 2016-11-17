@@ -1,0 +1,16 @@
+#%Module1.0
+proc ModulesHelp { } {
+        puts stderr "\tSets environment for FEniCS tferma-master branch with PETSc maint (TerraFERMA installtion)"
+}
+module-whatis "FEniCS tferma-master (TerraFERMA)"
+
+set fenics_prefix /usr/local/fenics
+
+prepend-path LD_LIBRARY_PATH $fenics_prefix/lib
+prepend-path PATH            $fenics_prefix/bin
+prepend-path PKG_CONFIG_PATH $fenics_prefix/lib/pkgconfig
+prepend-path PYTHONPATH      $fenics_prefix/lib/python2.7/site-packages
+prepend-path MANPATH         $fenics_prefix/share/man
+
+module load petsc
+
