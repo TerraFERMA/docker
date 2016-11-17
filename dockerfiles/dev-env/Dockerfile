@@ -23,7 +23,6 @@ RUN apt-get update && \
                        python-scipy \
                        python-matplotlib \
                        python-ply \
-                       python-sympy \
                        python-pytest \
                        python-setuptools \
                        swig3.0 \
@@ -128,15 +127,14 @@ RUN apt-add-repository ppa:fluidity-core/ppa && \
                        python-spud \
                        spudtools && \
     apt-get clean && \
-    rm -rf /tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV NO_AT_BRIDGE 1
 
 WORKDIR $TF_HOME
 
 USER tfuser
-RUN echo 'source ~/.profile' >> $TF_HOME/.bash_profile && \
-    echo '. ~/fenics.env.conf' >> $TF_HOME/.profile
+RUN echo 'source ~/.profile' >> $TF_HOME/.bash_profile
 COPY WELCOME $TF_HOME/WELCOME
 
 USER root
