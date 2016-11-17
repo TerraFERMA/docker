@@ -1,5 +1,4 @@
-#FROM quay.io/cianwilson/terrafermatestbase
-FROM terrafermabase
+FROM terraferma/base
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
