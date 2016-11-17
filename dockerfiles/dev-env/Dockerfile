@@ -1,4 +1,4 @@
-FROM terraferma/base
+FROM terraferma/base:latest
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
