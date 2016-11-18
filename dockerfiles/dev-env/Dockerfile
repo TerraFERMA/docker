@@ -69,7 +69,7 @@ RUN apt-get update && \
 
 # enable environment modules
 COPY bash.enable-modules /etc/bash.enable-modules
-RUN cat /etc/bash.enable-modules >> /etc/bash.bashrc
+RUN cat /etc/bash.enable-modules >> /etc/profile
 
 # install all python dependencies
 RUN apt-get update && \
@@ -194,7 +194,7 @@ WORKDIR $TF_HOME
 # load modules at startup
 USER tfuser
 COPY bash.load-modules $TF_HOME/.bash.load-modules
-RUN cat $TF_HOME/.bash.load-modules >> $TF_HOME/.bashrc
+RUN cat $TF_HOME/.bash.load-modules >> $TF_HOME/.profile
 COPY WELCOME $TF_HOME/WELCOME
 
 USER root

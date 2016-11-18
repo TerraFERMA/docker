@@ -1,8 +1,4 @@
 
-# enable environment modules
-if [ -f /usr/share/modules/init/bash ]; then
-    . /usr/share/modules/init/bash
-fi
 if [ "x$MODULESHOME" != "x" ]; then
     module use --append /usr/local/share/environment-modules
 fi

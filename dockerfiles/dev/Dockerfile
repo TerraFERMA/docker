@@ -61,7 +61,7 @@ USER tfuser
 COPY bash.load-modules $TF_HOME/.bash.load-modules
 RUN ln -s $TF_PREFIX/share/terraferma/tests $TF_HOME/tests && \
     ln -s $TF_PREFIX/share/terraferma/tutorials $TF_HOME/tutorials && \
-    cat $TF_HOME/.bash.load-modules >> $TF_HOME/.bashrc
+    cat $TF_HOME/.bash.load-modules >> $TF_HOME/.profile
 COPY WELCOME $TF_HOME/WELCOME
 
 USER root
