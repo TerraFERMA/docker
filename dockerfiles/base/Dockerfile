@@ -1,3 +1,38 @@
+# Modified (along with supplemental files and scripts) from the Dockerimage used by FEniCS:
+# https://bitbucket.org/fenics-project/docker
+#
+#
+# Copyright (C) 2013 Columbia University in the City of New York and others.
+#
+# Please see the AUTHORS file in the main source directory for a full list
+# of contributors.
+#
+# This file is part of TerraFERMA.
+#
+# TerraFERMA is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# TerraFERMA is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with TerraFERMA. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Builds a base Docker image that all other TerraFERMA images are
+# built from. We create the user tfuser, set up the base environment
+# and default entry point and cmd.
+#
+# The built image can be found at:
+#
+#   https://hub.docker.com/r/terraferma/base
+#
+
+# build off Ubuntu 16.04LTS (Xenial) with a few fixes for docker
 FROM phusion/baseimage:0.9.19 
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
@@ -38,6 +73,7 @@ RUN touch $TF_HOME/.sudo_as_admin_successful && \
     mkdir $TF_HOME/shared
 VOLUME /home/tfuser/shared
 
+# Print a default welcome message on startup
 COPY WELCOME $TF_HOME/WELCOME
 
 WORKDIR /home/tfuser
