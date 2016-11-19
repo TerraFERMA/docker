@@ -30,7 +30,7 @@
 #
 
 # build from the base image
-FROM terraferma/base:latest
+FROM terraferma/base:dolfin-master
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root

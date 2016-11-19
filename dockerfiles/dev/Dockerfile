@@ -26,7 +26,7 @@
 #
 
 # build using the TerraFERMA development environment
-FROM terraferma/dev-env:latest
+FROM terraferma/dev-env:dolfin-master
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
