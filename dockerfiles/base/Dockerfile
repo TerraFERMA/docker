@@ -32,8 +32,8 @@
 #   https://hub.docker.com/r/terraferma/base
 #
 
-# build off Ubuntu 16.04LTS (Xenial) with a few fixes for docker
-FROM phusion/baseimage:0.9.19 
+# build off Ubuntu 14.04LTS (Trusty) with a few fixes for docker
+FROM phusion/baseimage:0.9.15
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 # Get Ubuntu updates
@@ -54,15 +54,12 @@ ENV LC_ALL=C.UTF-8 \
 COPY set-home-permissions.sh /etc/my_init.d/set-home-permissions.sh
 
 # Set up user so that we do not run as root
-# See https://github.com/phusion/baseimage-docker/issues/186
-# Disable forward logging
 # Add script to set up permissions of home directory on myinit
 # Run ldconfig so that /usr/local/lib is in the default search
 # path for the dynamic linker.
 RUN useradd -m -s /bin/bash -G sudo,docker_env,adm tfuser && \
     echo "tfuser:docker" | chpasswd && \
     echo "tfuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    touch /etc/service/syslog-forwarder/down && \
     echo "cat /home/tfuser/WELCOME" >> /home/tfuser/.bashrc && \
     chmod +x /etc/my_init.d/set-home-permissions.sh && \
     ldconfig

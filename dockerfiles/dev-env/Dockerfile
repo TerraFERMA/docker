@@ -30,7 +30,7 @@
 #
 
 # build from the base image
-FROM terraferma/base:latest
+FROM terraferma/base:v0.9
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -51,17 +51,19 @@ RUN apt-get update && \
                        flex \
                        libblas-dev \
                        liblapack-dev \
-                       swig3.0 \
+                       swig2.0 \
                        libeigen3-dev \
                        libboost-dev \
                        libboost-filesystem-dev \
                        libboost-program-options-dev \
+                       libboost-system-dev \
+                       libboost-thread-dev \
                        libboost-iostreams-dev \
-                       libboost-timer-dev \
                        libvtk5-dev \
-                       libvtk-java \
-                       libvtk5-qt4-dev \
+                       libvtkgdcm-java \
+                       libvtk5.8-qt4 \
                        libhdf5-openmpi-dev \
+                       libcppunit-dev \
                        gmsh \
                        environment-modules && \
     apt-get clean && \
@@ -82,14 +84,22 @@ RUN apt-get update && \
                        python-matplotlib \
                        python-ply \
                        python-pytest \
-                       python-setuptools \
                        python-vtk && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# install sympy - heavy, so don't install recommended packages
+RUN apt-get update && \
+    apt-get -y --with-new-pkgs \
+        -o Dpkg::Options::="--force-confold" -o Dpkg::Options::="--force-confdef" upgrade && \
+    apt-get -y install --no-install-recommends \
+                       python-sympy && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # download and install petsc from source
 ENV PETSC_PREFIX /usr/local/petsc
-RUN git clone -b tferma-master -q https://bitbucket.org/tferma/petsc.git && \
+RUN git clone -b tferma-v0.9 -q https://bitbucket.org/tferma/petsc.git && \
     cd petsc && \
     ./configure --COPTFLAGS="-O2" \
                 --CXXOPTFLAGS="-O2" \
@@ -115,34 +125,23 @@ COPY petsc.configmodule /usr/local/share/environment-modules/petsc
 
 # download and install all the fenics components from source
 ENV FENICS_PREFIX /usr/local/fenics
-RUN mkdir -p $FENICS_PREFIX/lib/python2.7/site-packages
 # ufl
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
-    git clone -b tferma-master -q https://bitbucket.org/tferma/ufl.git && \
+RUN git clone -b tferma-v0.9 -q https://bitbucket.org/tferma/ufl.git && \
     cd ufl && \
     python setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
 # fiat
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
-    git clone -b tferma-master -q https://bitbucket.org/tferma/fiat.git && \
+RUN git clone -b tferma-v0.9 -q https://bitbucket.org/tferma/fiat.git && \
     cd fiat && \
     python setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
-# dijitso
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
-    git clone -b tferma-master -q https://bitbucket.org/tferma/dijitso.git && \
-    cd dijitso && \
-    python setup.py install --prefix=$FENICS_PREFIX && \
-    rm -rf /tmp/*
 # instant
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
-    git clone -b tferma-master -q https://bitbucket.org/tferma/instant.git && \
+RUN git clone -b tferma-v0.9 -q https://bitbucket.org/tferma/instant.git && \
     cd instant && \
     python setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
 # ffc
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
-    git clone -b tferma-master -q https://bitbucket.org/tferma/ffc.git && \
+RUN git clone -b tferma-v0.9 -q https://bitbucket.org/tferma/ffc.git && \
     cd ffc && \
     python setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
@@ -150,7 +149,7 @@ RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
 RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
     export PETSC_DIR=$PETSC_PREFIX && \
     export PATH=$FENICS_PREFIX/bin:$PATH && \
-    git clone -b tferma-master -q https://bitbucket.org/tferma/dolfin.git && \
+    git clone -b tferma-v0.9 -q https://bitbucket.org/tferma/dolfin.git && \
     cd dolfin && \
     mkdir build && \
     cd build && \

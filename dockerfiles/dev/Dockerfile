@@ -26,7 +26,7 @@
 #
 
 # build using the TerraFERMA development environment
-FROM terraferma/dev-env:latest
+FROM terraferma/dev-env:v0.9
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -39,7 +39,7 @@ RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
     export PATH=$FENICS_PREFIX/bin:$PATH && \
     export LD_LIBRARY_PATH=$FENICS_PREFIX/lib:$LD_LIBRARY_PATH && \
     export PKG_CONFIG_PATH=$FENICS_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH && \
-    git clone -b master -q https://github.com/TerraFERMA/TerraFERMA.git && \
+    git clone -b v0.9 -q https://github.com/TerraFERMA/TerraFERMA.git && \
     cd TerraFERMA && \
     mkdir build && \
     cd build && \
