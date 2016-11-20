@@ -26,7 +26,7 @@
 #
 
 # build using the TerraFERMA development environment
-FROM terraferma/dev-env:latest
+FROM terraferma/dev-env:debug
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -44,6 +44,7 @@ RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
     mkdir build && \
     cd build && \
     cmake -DCMAKE_INSTALL_PREFIX=${TF_PREFIX} \
+          -DCMAKE_BUILD_TYPE=Debug \
           ../. && \
     make && \
     make install && \

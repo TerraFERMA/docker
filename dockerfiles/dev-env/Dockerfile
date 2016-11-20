@@ -30,7 +30,7 @@
 #
 
 # build from the base image
-FROM terraferma/base:latest
+FROM terraferma/base:debug
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -91,10 +91,7 @@ RUN apt-get update && \
 ENV PETSC_PREFIX /usr/local/petsc
 RUN git clone -b tferma-master -q https://bitbucket.org/tferma/petsc.git && \
     cd petsc && \
-    ./configure --COPTFLAGS="-O2" \
-                --CXXOPTFLAGS="-O2" \
-                --FOPTFLAGS="-O2" \
-                --with-clanguage=C++ \
+    ./configure --with-clanguage=C++ \
                 --with-shared-libraries=1 \
                 --download-suitesparse=1 \
                 --download-hypre=1 \
@@ -104,7 +101,7 @@ RUN git clone -b tferma-master -q https://bitbucket.org/tferma/petsc.git && \
                 --download-blacs=1 \
                 --download-scalapack=1 \
                 --download-mumps=1 \
-                --with-debugging=0 \
+                --with-debugging=1 \
                 --prefix=$PETSC_PREFIX && \
     make all && \
     make install && \
@@ -120,31 +117,31 @@ RUN mkdir -p $FENICS_PREFIX/lib/python2.7/site-packages
 RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
     git clone -b tferma-master -q https://bitbucket.org/tferma/ufl.git && \
     cd ufl && \
-    python setup.py install --prefix=$FENICS_PREFIX && \
+    python setup.py install --prefix=$FENICS_PREFIX -O0 && \
     rm -rf /tmp/*
 # fiat
 RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
     git clone -b tferma-master -q https://bitbucket.org/tferma/fiat.git && \
     cd fiat && \
-    python setup.py install --prefix=$FENICS_PREFIX && \
+    python setup.py install --prefix=$FENICS_PREFIX -O0 && \
     rm -rf /tmp/*
 # dijitso
 RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
     git clone -b tferma-master -q https://bitbucket.org/tferma/dijitso.git && \
     cd dijitso && \
-    python setup.py install --prefix=$FENICS_PREFIX && \
+    python setup.py install --prefix=$FENICS_PREFIX -O0 && \
     rm -rf /tmp/*
 # instant
 RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
     git clone -b tferma-master -q https://bitbucket.org/tferma/instant.git && \
     cd instant && \
-    python setup.py install --prefix=$FENICS_PREFIX && \
+    python setup.py install --prefix=$FENICS_PREFIX -O0 && \
     rm -rf /tmp/*
 # ffc
 RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
     git clone -b tferma-master -q https://bitbucket.org/tferma/ffc.git && \
     cd ffc && \
-    python setup.py install --prefix=$FENICS_PREFIX && \
+    python setup.py install --prefix=$FENICS_PREFIX -O0 && \
     rm -rf /tmp/*
 # dolfin
 RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
@@ -154,7 +151,7 @@ RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
     cd dolfin && \
     mkdir build && \
     cd build && \
-    cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    cmake -DCMAKE_BUILD_TYPE=Debug \
           -DDOLFIN_ENABLE_CHOLMOD:BOOL=OFF \
           -DDOLFIN_ENABLE_UMFPACK:BOOL=OFF \
           -DDOLFIN_ENABLE_TRILINOS:BOOL=OFF \
