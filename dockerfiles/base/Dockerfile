@@ -74,6 +74,7 @@ VOLUME /home/tfuser/shared
 COPY WELCOME $TF_HOME/WELCOME
 
 WORKDIR /home/tfuser
+ENV HOME /home/tfuser
 USER root
 ENTRYPOINT ["/sbin/my_init","--quiet","--","/sbin/setuser","tfuser","/bin/bash","-l","-c"]
 CMD ["/bin/bash","-i"]
