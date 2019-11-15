@@ -3,7 +3,7 @@
 Welcome to TerraFERMA!
 
 This docker image contains a complete installation of TerraFERMA and its dependencies, PETSc, FEniCS and SPuD, within an Ubuntu
-16.04LTS OS.
+18.04LTS OS.
 
 The environment variables have been set automatically using environment modules and it should now be possible to build and run
 TerraFERMA models within this container.  Opening the diamond GUI (and other visualization tools) depends on having forwarded the

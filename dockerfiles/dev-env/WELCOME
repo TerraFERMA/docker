@@ -3,5 +3,5 @@
 Welcome to the TerraFERMA development environment.
 
 This docker image does not contain an installation of TerraFERMA but does provide a full installation of all its dependencies,
-PETSc, FEniCS and SPuD, within and Ubuntu 16.04 OS. 
+PETSc, FEniCS and SPuD, within and Ubuntu 18.04 OS. 
 
