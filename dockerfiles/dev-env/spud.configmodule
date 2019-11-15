@@ -1,0 +1,14 @@
+#%Module1.0
+proc ModulesHelp { } {
+        puts stderr "\tSets environment for SPuD."
+}
+module-whatis "Sets environment for SPuD"
+
+set spud_prefix /usr/local/spud
+
+# Standard paths
+setenv        SPUD_DIR         $spud_prefix
+prepend-path  PATH             $spud_prefix/bin
+prepend-path  PYTHONPATH       $spud_prefix/lib/python3.6/site-packages
+prepend-path  LD_LIBRARY_PATH  $spud_prefix/lib
+

@@ -33,7 +33,7 @@
 #
 
 # build off Ubuntu 16.04LTS (Xenial) with a few fixes for docker
-FROM phusion/baseimage:0.9.19 
+FROM phusion/baseimage:0.11
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 # Get Ubuntu updates
@@ -62,8 +62,8 @@ COPY set-home-permissions.sh /etc/my_init.d/set-home-permissions.sh
 RUN useradd -m -s /bin/bash -G sudo,docker_env,adm tfuser && \
     echo "tfuser:docker" | chpasswd && \
     echo "tfuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    touch /etc/service/syslog-forwarder/down && \
     echo "cat /home/tfuser/WELCOME" >> /home/tfuser/.bashrc && \
+    rm /etc/my_init.d/10_syslog-ng.init && \
     chmod +x /etc/my_init.d/set-home-permissions.sh && \
     ldconfig
 

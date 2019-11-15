@@ -1,0 +1,13 @@
+#%Module1.0
+proc ModulesHelp { } {
+        puts stderr "\tSets your environment to use openmpi."
+}
+module-whatis   "Sets environment for openmpi"
+
+set openmpi_prefix /usr/local/openmpi
+
+prepend-path     PATH                   $openmpi_prefix/bin
+prepend-path     LD_LIBRARY_PATH        $openmpi_prefix/lib
+prepend-path     INCLUDE                $openmpi_prefix/include
+
+

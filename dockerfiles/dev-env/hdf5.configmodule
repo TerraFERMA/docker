@@ -1,0 +1,20 @@
+#%Module1.0
+proc ModulesHelp { } {
+        puts stderr "\tSets environment for hdf5."
+}
+module-whatis "Sets environment for hdf5."
+
+set hdf5_prefix /usr/local/hdf5
+
+prepend-path PATH             $hdf5_prefix/bin
+prepend-path CPATH            $hdf5_prefix/include
+prepend-path INCLUDE          $hdf5_prefix/include
+prepend-path LIBRARY_PATH     $hdf5_prefix/lib
+prepend-path LD_LIBRARY_PATH  $hdf5_prefix/lib
+setenv       HDF5_DIR         $hdf5_prefix
+setenv       HDF5_INCLUDE_DIR $hdf5_prefix/include
+setenv       HDF5_LIB         $hdf5_prefix/lib
+setenv       HDF5_INC         $hdf5_prefix/include
+
+module load openmpi
+

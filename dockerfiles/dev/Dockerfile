@@ -26,7 +26,7 @@
 #
 
 # build using the TerraFERMA development environment
-FROM terraferma/dev-env:latest
+FROM terraferma/dev-env:fenics-2019.1.0
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -34,12 +34,12 @@ WORKDIR /tmp
 
 # install terraferma
 ENV TF_PREFIX /usr/local/terraferma
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python2.7/site-packages && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.6/site-packages && \
     export PETSC_DIR=$PETSC_PREFIX && \
     export PATH=$FENICS_PREFIX/bin:$PATH && \
     export LD_LIBRARY_PATH=$FENICS_PREFIX/lib:$LD_LIBRARY_PATH && \
     export PKG_CONFIG_PATH=$FENICS_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH && \
-    git clone -b master -q https://github.com/TerraFERMA/TerraFERMA.git && \
+    git clone -b vtkfile-2019.1.0 -q https://github.com/TerraFERMA/TerraFERMA.git && \
     cd TerraFERMA && \
     mkdir build && \
     cd build && \

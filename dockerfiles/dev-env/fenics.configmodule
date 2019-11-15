@@ -9,8 +9,8 @@ set fenics_prefix /usr/local/fenics
 prepend-path LD_LIBRARY_PATH $fenics_prefix/lib
 prepend-path PATH            $fenics_prefix/bin
 prepend-path PKG_CONFIG_PATH $fenics_prefix/lib/pkgconfig
-prepend-path PYTHONPATH      $fenics_prefix/lib/python2.7/site-packages
+prepend-path PYTHONPATH      $fenics_prefix/lib/python3.6/site-packages
 prepend-path MANPATH         $fenics_prefix/share/man
 
-module load petsc
+module load pybind11 hdf5 petsc
 

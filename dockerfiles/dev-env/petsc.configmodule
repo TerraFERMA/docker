@@ -11,3 +11,5 @@ prepend-path    LD_LIBRARY_PATH $petsc_prefix/lib
 prepend-path    PYTHONPATH      $petsc_prefix/lib/python2.7/site-packages
 setenv          PETSC_DIR       $petsc_prefix
 
+module load openmpi
+
