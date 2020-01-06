@@ -55,14 +55,28 @@ RUN apt-get update && \
                        libboost-program-options-dev \
                        libboost-iostreams-dev \
                        libboost-timer-dev \
-                       gmsh \
                        wget \
                        gir1.2-gtksource-3.0 \
                        gir1.2-gtk-3.0 \
                        tcl \
+                       vim \
                        environment-modules && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# download and install gmsh from source
+ENV GMSH_PREFIX /usr/local/gmsh
+RUN git clone -b gmsh_4_0_7 -q https://gitlab.onelab.info/gmsh/gmsh.git && \
+    cd gmsh && \
+    mkdir build && \
+    cd build && \
+    cmake -DCMAKE_INSTALL_PREFIX=${GMSH_PREFIX} ../. && \
+    make && \
+    make install && \
+    pip3 install pygmsh && \
+    rm -rf /tmp/*
+# install an environment module for gmsh
+COPY gmsh.configmodule /usr/local/share/environment-modules/gmsh
 
 # enable environment modules
 COPY bash.enable-modules /etc/bash.enable-modules
@@ -87,7 +101,11 @@ RUN apt-get update && \
                        python3-future \
                        python3-gi \
                        python3-lxml \
-                       cython3 && \
+                       cython3 \
+                       python3-cairocffi \
+                       python3-cairo \
+                       python3-gi-cairo \
+                       python3-pip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

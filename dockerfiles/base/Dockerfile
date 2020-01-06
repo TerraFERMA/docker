@@ -62,6 +62,7 @@ COPY set-home-permissions.sh /etc/my_init.d/set-home-permissions.sh
 RUN useradd -m -s /bin/bash -G sudo,docker_env,adm tfuser && \
     echo "tfuser:docker" | chpasswd && \
     echo "tfuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    echo "PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '" >> /home/tfuser/.bashrc && \
     echo "cat /home/tfuser/WELCOME" >> /home/tfuser/.bashrc && \
     rm /etc/my_init.d/10_syslog-ng.init && \
     chmod +x /etc/my_init.d/set-home-permissions.sh && \
