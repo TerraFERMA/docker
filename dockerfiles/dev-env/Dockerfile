@@ -55,6 +55,7 @@ RUN apt-get update && \
                        libboost-program-options-dev \
                        libboost-iostreams-dev \
                        libboost-timer-dev \
+                       gmsh \
                        wget \
                        gir1.2-gtksource-3.0 \
                        gir1.2-gtk-3.0 \
@@ -238,20 +239,6 @@ RUN git clone -q https://github.com/FluidityProject/spud.git && \
     rm -rf /tmp/*
 # install an environment module for spud
 COPY spud.configmodule /usr/local/share/environment-modules/spud
-
-# download and install gmsh from source
-ENV GMSH_PREFIX /usr/local/gmsh
-RUN git clone -b gmsh_4_0_7 -q https://gitlab.onelab.info/gmsh/gmsh.git && \
-    cd gmsh && \
-    mkdir build && \
-    cd build && \
-    cmake -DCMAKE_INSTALL_PREFIX=${GMSH_PREFIX} ../. && \
-    make && \
-    make install && \
-    pip3 install pygmsh && \
-    rm -rf /tmp/*
-# install an environment module for gmsh
-COPY gmsh.configmodule /usr/local/share/environment-modules/gmsh
 
 # supress some spurious gtk errors
 ENV NO_AT_BRIDGE 1
