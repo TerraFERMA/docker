@@ -60,6 +60,8 @@ RUN apt-get update && \
                        gir1.2-gtk-3.0 \
                        tcl \
                        vim \
+		       vtk7 \
+		       evince \
                        environment-modules && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -91,6 +93,7 @@ RUN apt-get update && \
                        python3-cairocffi \
                        python3-cairo \
                        python3-gi-cairo \
+		       python3-vtk7 \
                        python3-pip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
