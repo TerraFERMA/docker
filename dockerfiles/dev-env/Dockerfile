@@ -47,8 +47,7 @@ RUN apt-get update && \
                        gfortran \
                        cmake \
                        flex \
-                       libblas-dev \
-                       liblapack-dev \
+                       libopenblas-dev \
                        libeigen3-dev \
                        libboost-dev \
                        libboost-filesystem-dev \
@@ -131,7 +130,7 @@ RUN export PYTHONPATH=$PYBIND11_PREFIX/lib/python3.6/site-packages && \
     cd pybind11 && \
     mkdir build && \
     cd build && \
-    cmake -DCMAKE_INSTALL_PREFIX=${PYBIND11_PREFIX} ../. && \
+    cmake -DCMAKE_INSTALL_PREFIX=${PYBIND11_PREFIX} -DCMAKE_BUILD_TYPE=Release ../. && \
     make && \
     make install && \
     rm -rf /tmp/*
@@ -211,7 +210,7 @@ RUN export PYTHONPATH=$PYBIND11_PREFIX/lib/python3.6/site-packages:$FENICS_PREFI
     cd dolfin && \
     mkdir build && \
     cd build && \
-    cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    cmake -DCMAKE_BUILD_TYPE=Release \
           -DDOLFIN_ENABLE_CHOLMOD:BOOL=OFF \
           -DDOLFIN_ENABLE_UMFPACK:BOOL=OFF \
           -DDOLFIN_ENABLE_TRILINOS:BOOL=OFF \

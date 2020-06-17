@@ -26,7 +26,7 @@
 #
 
 # build using the TerraFERMA development environment
-FROM terraferma/dev-env:fenics-2019.1.0
+FROM mspieg/dev-env:fenics-2019.1.0
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -44,7 +44,7 @@ RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.6/site-packages && \
     cd TerraFERMA && \
     mkdir build && \
     cd build && \
-    cmake -DCMAKE_INSTALL_PREFIX=${TF_PREFIX} \
+    cmake -DCMAKE_INSTALL_PREFIX=${TF_PREFIX} -DCMAKE_BUILD_TYPE=Release  \
           ../. && \
     make && \
     make install && \
