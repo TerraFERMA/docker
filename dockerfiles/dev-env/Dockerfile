@@ -30,7 +30,7 @@
 #
 
 # build from the base image
-FROM terraferma/base:fenics-2019.1.0
+FROM mspieg/base:focal
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -58,6 +58,7 @@ RUN apt-get update && \
                        wget \
                        gir1.2-gtksource-3.0 \
                        gir1.2-gtk-3.0 \
+		       adwaita-icon-theme-full \
                        tcl \
                        vim \
 		       vtk7 \
@@ -127,8 +128,8 @@ COPY hdf5.configmodule /usr/local/share/environment-modules/hdf5
 
 # download and install pybind11 from source
 ENV PYBIND11_PREFIX /usr/local/pybind11
-RUN mkdir -p $PYBIND11_PREFIX/lib/python3.6/site-packages
-RUN export PYTHONPATH=$PYBIND11_PREFIX/lib/python3.6/site-packages && \
+RUN mkdir -p $PYBIND11_PREFIX/lib/python3.8/site-packages
+RUN export PYTHONPATH=$PYBIND11_PREFIX/lib/python3.8/site-packages && \
     git clone -b v2.2.4 -q https://github.com/pybind/pybind11.git && \
     cd pybind11 && \
     mkdir build && \
@@ -145,22 +146,23 @@ ENV PETSC_PREFIX /usr/local/petsc
 RUN export PATH=$OPENMPI_PREFIX/bin:$PATH && \
     export LD_LIBRARY_PATH=$OPENMPI_PREFIX/lib:$LD_LIBRARY_PATH && \
     export INCLUDE=$OPENMPI_PREFIX/include:$INCLUDE && \
+    rm -rf /tmp/* && \
+    wget https://github.com/hypre-space/hypre/archive/v2.15.1.tar.gz && \
     git clone -b v3.11.3 -q https://gitlab.com/petsc/petsc.git && \
     cd petsc && \
-    python3 ./configure --COPTFLAGS="-O2" \
-                        --CXXOPTFLAGS="-O2" \
-                        --FOPTFLAGS="-O2" \
+    python3 ./configure --COPTFLAGS="-O3 -march=native -mtune=native" \
+                        --CXXOPTFLAGS="-O3  -march=native -mtune=native" \
+                        --FOPTFLAGS="-O3  -march=native -mtune=native" \
                         --with-clanguage=C++ \
                         --with-shared-libraries=1 \
                         --download-suitesparse=1 \
-                        --download-hypre=1 \
+                        --download-hypre=/tmp/v2.15.1.tar.gz \
                         --download-ml=1 \
                         --download-parmetis=1 \
                         --download-metis=1 \
                         --download-blacs=1 \
                         --download-scalapack=1 \
                         --download-mumps=1 \
-                        --download-petsc4py=1 \
                         --with-debugging=0 \
                         --prefix=$PETSC_PREFIX && \
     make all && \
@@ -171,33 +173,33 @@ COPY petsc.configmodule /usr/local/share/environment-modules/petsc
 
 # download and install all the fenics components from source
 ENV FENICS_PREFIX /usr/local/fenics
-RUN mkdir -p $FENICS_PREFIX/lib/python3.6/site-packages
+RUN mkdir -p $FENICS_PREFIX/lib/python3.8/site-packages
 # ufl
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.6/site-packages && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.8/site-packages && \
     git clone -b tferma-master-2019.1.0 -q https://bitbucket.org/tferma/ufl.git && \
     cd ufl && \
     python3 setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
 # fiat
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.6/site-packages && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.8/site-packages && \
     git clone -b tferma-master-2019.1.0 -q https://bitbucket.org/tferma/fiat.git && \
     cd fiat && \
     python3 setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
 # dijitso
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.6/site-packages && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.8/site-packages && \
     git clone -b tferma-master-2019.1.0 -q https://bitbucket.org/tferma/dijitso.git && \
     cd dijitso && \
     python3 setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
 # ffc
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.6/site-packages && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.8/site-packages && \
     git clone -b tferma-master-2019.1.0 -q https://bitbucket.org/tferma/ffc.git && \
     cd ffc && \
     python3 setup.py install --prefix=$FENICS_PREFIX && \
     rm -rf /tmp/*
 # dolfin
-RUN export PYTHONPATH=$PYBIND11_PREFIX/lib/python3.6/site-packages:$FENICS_PREFIX/lib/python3.6/site-packages && \
+RUN export PYTHONPATH=$PYBIND11_PREFIX/lib/python3.8/site-packages:$FENICS_PREFIX/lib/python3.8/site-packages && \
     export PETSC_DIR=$PETSC_PREFIX && \
     export PATH=$PYBIND11_PREFIX/bin:$FENICS_PREFIX/bin:$HDF5_PREFIX/bin:$OPENMPI_PREFIX/bin:$PATH && \
     export LD_LIBRARY_PATH=$HDF5_PREFIX/lib:$OPENMPI_PREFIX/lib:$LD_LIBRARY_PATH && \

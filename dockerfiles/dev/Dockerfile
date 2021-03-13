@@ -26,7 +26,7 @@
 #
 
 # build using the TerraFERMA development environment
-FROM mspieg/dev-env:fenics-2019.1.0
+FROM mspieg/dev-env:focal
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -34,7 +34,7 @@ WORKDIR /tmp
 
 # install terraferma
 ENV TF_PREFIX /usr/local/terraferma
-RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.6/site-packages && \
+RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.8/site-packages && \
     export PETSC_DIR=$PETSC_PREFIX && \
     export PATH=$FENICS_PREFIX/bin:$PATH && \
     export LD_LIBRARY_PATH=$FENICS_PREFIX/lib:$LD_LIBRARY_PATH && \

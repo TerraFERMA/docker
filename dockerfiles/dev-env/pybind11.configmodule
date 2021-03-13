@@ -9,5 +9,5 @@ set pybind11_prefix /usr/local/pybind11
 prepend-path LD_LIBRARY_PATH $pybind11_prefix/2.2.4/lib
 prepend-path PATH            $pybind11_prefix/2.2.4/bin
 prepend-path PKG_CONFIG_PATH $pybind11_prefix/2.2.4/lib/pkgconfig
-prepend-path PYTHONPATH      $pybind11_prefix/2.2.4/lib/python3.6/site-packages
+prepend-path PYTHONPATH      $pybind11_prefix/2.2.4/lib/python3.8/site-packages
 
