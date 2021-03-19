@@ -32,15 +32,28 @@ MAINTAINER terraferma <terraferma@lists.columbia.edu>
 USER root
 WORKDIR /tmp
 
+# add a few more packages
+RUN apt-get update && \
+    apt-get -y --with-new-pkgs \
+        -o Dpkg::Options::="--force-confold" -o Dpkg::Options::="--force-confdef" upgrade && \
+    apt-get -y install \
+                       2to3 \
+&& \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # install terraferma
-ENV TF_PREFIX /usr/local/terraferma
+ENV TF_PREFIX=/usr/local/terraferma \
+    OPENBLAS_NUM_THREADS=1 \
+    OPENBLAS_VERBOSE=0
+    
 RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.8/site-packages && \
     export PETSC_DIR=$PETSC_PREFIX && \
     export PATH=$FENICS_PREFIX/bin:$PATH && \
     export LD_LIBRARY_PATH=$FENICS_PREFIX/lib:$LD_LIBRARY_PATH && \
     export PKG_CONFIG_PATH=$FENICS_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH && \
     export SPUD_DIR=$SPUD_PREFIX && \
-    git clone -b master-2019.1.0 -q https://github.com/TerraFERMA/TerraFERMA.git && \
+    git clone -b mspieg/master-2019.1.0-update-fixes -q https://github.com/TerraFERMA/TerraFERMA.git && \
     cd TerraFERMA && \
     mkdir build && \
     cd build && \

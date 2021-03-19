@@ -150,11 +150,12 @@ RUN export PATH=$OPENMPI_PREFIX/bin:$PATH && \
     wget https://github.com/hypre-space/hypre/archive/v2.15.1.tar.gz && \
     git clone -b v3.11.3 -q https://gitlab.com/petsc/petsc.git && \
     cd petsc && \
-    python3 ./configure --COPTFLAGS="-O3 -march=native -mtune=native" \
-                        --CXXOPTFLAGS="-O3  -march=native -mtune=native" \
-                        --FOPTFLAGS="-O3  -march=native -mtune=native" \
-                        --with-clanguage=C++ \
+    python3 ./configure --COPTFLAGS="-O3" \
+                        --CXXOPTFLAGS="-O3" \
+                        --FOPTFLAGS="-O3" \
                         --with-shared-libraries=1 \
+                        --with-openblas=1 \
+                        --with-debugging=0 \
                         --download-suitesparse=1 \
                         --download-hypre=/tmp/v2.15.1.tar.gz \
                         --download-ml=1 \
@@ -163,7 +164,6 @@ RUN export PATH=$OPENMPI_PREFIX/bin:$PATH && \
                         --download-blacs=1 \
                         --download-scalapack=1 \
                         --download-mumps=1 \
-                        --with-debugging=0 \
                         --prefix=$PETSC_PREFIX && \
     make all && \
     make install && \
