@@ -32,7 +32,7 @@
 #   https://hub.docker.com/r/terraferma/base
 #
 
-# build off Ubuntu 20.04LTS (Focal?) with a few fixes for docker
+# build off Ubuntu 20.04LTS (Focal) with a few fixes for docker
 FROM phusion/baseimage:master-amd64
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 

@@ -30,7 +30,7 @@
 #
 
 # build from the base image
-FROM mspieg/base:focal
+FROM terraferma/base:fenics-2019.1.0-focal
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
@@ -58,7 +58,8 @@ RUN apt-get update && \
                        wget \
                        gir1.2-gtksource-3.0 \
                        gir1.2-gtk-3.0 \
-		       adwaita-icon-theme-full \
+                       adwaita-icon-theme-full \
+                       2to3 \
                        tcl \
                        vim \
 		       vtk7 \
@@ -66,6 +67,10 @@ RUN apt-get update && \
                        environment-modules && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# set environment variables for OPENBLAS to make single threaded
+ENV OPENBLAS_NUM_THREADS=1 \
+    OPENBLAS_VERBOSE=0
 
 # enable environment modules
 COPY bash.enable-modules /etc/bash.enable-modules

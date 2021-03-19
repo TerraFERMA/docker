@@ -26,27 +26,15 @@
 #
 
 # build using the TerraFERMA development environment
-FROM mspieg/dev-env:focal
+FROM terraferma/dev-env:fenics-2019.1.0-focal
 MAINTAINER terraferma <terraferma@lists.columbia.edu>
 
 USER root
 WORKDIR /tmp
 
-# add a few more packages
-RUN apt-get update && \
-    apt-get -y --with-new-pkgs \
-        -o Dpkg::Options::="--force-confold" -o Dpkg::Options::="--force-confdef" upgrade && \
-    apt-get -y install \
-                       2to3 \
-&& \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # install terraferma
-ENV TF_PREFIX=/usr/local/terraferma \
-    OPENBLAS_NUM_THREADS=1 \
-    OPENBLAS_VERBOSE=0
-    
+ENV TF_PREFIX=/usr/local/terraferma 
 RUN export PYTHONPATH=$FENICS_PREFIX/lib/python3.8/site-packages && \
     export PETSC_DIR=$PETSC_PREFIX && \
     export PATH=$FENICS_PREFIX/bin:$PATH && \
